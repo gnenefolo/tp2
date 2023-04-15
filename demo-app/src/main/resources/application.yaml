@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: demo-App
+  datasource:
+    url: jdbc:mysql://localhost:3306/db
+    username: samuel
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
