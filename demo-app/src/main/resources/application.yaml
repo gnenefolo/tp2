@@ -1,14 +1,16 @@
-server:
-  port: 8080
 spring:
-  application:
-    name: demo-App
   datasource:
-    url: jdbc:mysql://localhost:3306/db
-    username: samuel
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3307}/${MYSQL_DATABASE:testdb}?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${MYSQL_USER:springboot}
+    password: ${MYSQL_PASSWORD:springbootdata}
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: true
+      ddl-auto: ${JPA_HIBERNATE_DDL:create}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
+logging:
+  level:
+    root: warn
