@@ -5,12 +5,23 @@ spring:
     password: ${MYSQL_PASSWORD:springbootdata}
   jpa:
     hibernate:
-      ddl-auto: ${JPA_HIBERNATE_DDL:create}
+      ddl-auto: ${JPA_HIBERNATE_DDL:update}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true
+      time-to-live: 60000
+  redis:
+    port: 6379
+    host: ${REDIS_HOST:localhost}
 
 logging:
   level:
     root: warn
+server:
+  servlet:
+    context-path: /api/v1

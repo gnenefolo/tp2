@@ -12,12 +12,26 @@ services:
       MYSQL_USER: $MYSQLDB_USER
       MYSQL_PASSWORD: $MYSQLDB_ROOT_PASSWORD
     volumes:
-      - my-db:/var/lib/mysql
+      - mydb:/var/lib/mysql
+    networks:
+      - database_net
 
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
+    networks:
+      - cache_net
 
   app:
-    build: .
-    image: srping-webapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spring-webapp
     container_name: webapp-container
     depends_on:
       - mysqldb
@@ -31,9 +45,18 @@ services:
       MYSQL_HOST: mysqldb
       MYSQL_PASSWORD: $MYSQLDB_ROOT_PASSWORD
       JPA_HIBERNATE_DDL: $JPA_HIBERNATE_DDL
-      MYSQL_PORT: 3306
+      MYSQL_PORT: $MYSQLDB_DOCKER_PORT
+      REDIS_HOST: cache
+    networks:
+      - database_net
+      - cache_net
+
 
 
 
 volumes:
-  my-db:
+  mydb:
+
+networks:
+  database_net:
+  cache_net:
